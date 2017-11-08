@@ -1,0 +1,6 @@
+[WEBSERVER]
+192.168.33.11
+[WEBSERVER:vars]
+deploy_artifact_file=/var/lib/jenkins/workspace/copyartifact/target/app-1.0-SNAPSHOT.jar
+dest_remote_dir=/opt/tomcat/temp
+remote_service=tomcat
