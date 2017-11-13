@@ -2,15 +2,14 @@
 - hosts: all
   become: yes
   tasks:
+  - name: Stop Tomcat If Running
+
+  - name: Clear Webapp Directory before deploying WAR
+    file:
+      state: absent
+      path: "/opt/tomcat/webapps/"
   - copy:
        src: "{{ deploy_artifact_file }}"
        dest: "{{ dest_remote_dir }}"
        owner: tomcat
        group: tomcat
-    notify:
-    - restart tomcat
-  handlers:
-  - name: restart tomcat
-    service:
-       name: "{{ remote_service }}"
-       state: restarted

@@ -3,4 +3,5 @@
 [WEBSERVER:vars]
 deploy_artifact_file=/var/lib/jenkins/workspace/copyartifact/target/app-1.0-SNAPSHOT.jar
 dest_remote_dir=/opt/tomcat/temp
+webapp_dir=/opt/tomcat/webapps/
 remote_service=tomcat

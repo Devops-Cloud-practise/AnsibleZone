@@ -1,0 +1,69 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+  - name: 
+    shell: service tomcat status
+    args:
+      warn: false 
+    register: tomcat_status
+    ignore_errors: true
+
+#  - debug:
+ #      var: tomcat_status
+
+  - name: Terminating The Execution of Playbook If Tomcat Is Not Installed
+    fail: 
+      msg: "Tomcat Service is not installed on this Host ..........."
+    when: tomcat_status.rc != 0 or ("unrecognized service" in tomcat_status.stderr) 
+
+  - name: If Tomcat is Stopped then clearing webapps dir
+    file:
+      state: absent
+      path: /opt/tomcat/webapps
+    when: tomcat_status.rc == 0 and ("tomcat stop/waiting" in tomcat_status.stdout) 
+    register: webapps_del_status
+
+  - debug:
+       var: webapps_del_status.changed
+
+  - name: Recreating WebApps Dir
+    file:
+      state: directory
+      path: /opt/tomcat/webapps
+      owner: tomcat
+      group: tomcat
+    when: webapps_del_status.changed
+
+  - name: If Tomcat is already Running then stopping it
+    service: name=tomcat state=stopped
+    when: tomcat_status.rc == 0 and ("tomcat start/running" in tomcat_status.stdout)
+    register: _svc_tomcat_is_stop
+
+  - debug: 
+      var: _svc_tomcat_is_stop
+
+  - name: Pausing for 5 seconds
+    wait_for:
+      timeout: 5
+
+  - name: If Tomcat is Stopped then clearing webapps dir
+    file:
+      state: absent
+      path: /opt/tomcat/webapps
+    when: _svc_tomcat_is_stop.changed
+    register: webapps_del_status_1
+
+#  handlers:
+  - debug: 
+      var: webapps_del_status_1
+#  - name: stop tomcat
+  - name: Recreating WebApps Dir
+    file:
+      state: directory
+      path: /opt/tomcat/webapps
+      owner: tomcat
+      group: tomcat
+    when: webapps_del_status_1.changed
+#    service: name=tomcat state=stopped
+#    register: _svc_tomcat_is_stop 
