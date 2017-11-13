@@ -68,7 +68,8 @@
 #    service: name=tomcat state=stopped
 #    register: _svc_tomcat_is_stop 
   - name: Copy WAR file to Remote Tomcat server
-    copy: src=/var/lib/jenkins/workspace/QT-PROJECT/target/sparkjava-hello-world-1.0.war dest=/opt/tomcat/webapps/sparkjava-hello-world-1.0.war owner=tomcat group=tomcat
+    #copy: src=/var/lib/jenkins/workspace/QT-PROJECT/target/sparkjava-hello-world-1.0.war dest=/opt/tomcat/webapps/sparkjava-hello-world-1.0.war owner=tomcat group=tomcat
+    copy: src='{{ artifact_file }}' dest='{{ dest_dir }}'
     notify: restart-tomcat
 
   handlers:
