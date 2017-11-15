@@ -71,7 +71,7 @@
     #copy: src=/var/lib/jenkins/workspace/QT-PROJECT/target/sparkjava-hello-world-1.0.war dest=/opt/tomcat/webapps/sparkjava-hello-world-1.0.war owner=tomcat group=tomcat
     #copy: src='{{ artifact_file }}' dest='{{ dest_dir }}'
   - name: Recreating WebApps Dir
-    get_url: url='{{ artifact_url }}' dest='{{ dest_dir }}'
+    get_url: url='{{ artifact_file }}' dest='{{ dest_dir }}'
     notify: restart-tomcat
     become_user: tomcat
 
