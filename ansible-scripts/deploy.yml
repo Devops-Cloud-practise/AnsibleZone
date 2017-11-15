@@ -67,10 +67,13 @@
     when: webapps_del_status_1.changed
 #    service: name=tomcat state=stopped
 #    register: _svc_tomcat_is_stop 
-  - name: Copy WAR file to Remote Tomcat server
+ # - name: Copy WAR file to Remote Tomcat server
     #copy: src=/var/lib/jenkins/workspace/QT-PROJECT/target/sparkjava-hello-world-1.0.war dest=/opt/tomcat/webapps/sparkjava-hello-world-1.0.war owner=tomcat group=tomcat
-    copy: src='{{ artifact_file }}' dest='{{ dest_dir }}'
+    #copy: src='{{ artifact_file }}' dest='{{ dest_dir }}'
+  - name: Recreating WebApps Dir
+    get_url: url='{{ artifact_url }}' dest='{{ dest_dir }}'
     notify: restart-tomcat
+    become_user: tomcat
 
   handlers:
     - name: restart-tomcat
