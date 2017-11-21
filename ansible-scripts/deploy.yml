@@ -72,9 +72,15 @@
     #copy: src='{{ artifact_file }}' dest='{{ dest_dir }}'
   - name: Recreating WebApps Dir
     get_url: url='{{ artifact_file }}' dest='{{ dest_dir }}'
-    notify: restart-tomcat
+    notify: restart tomcat and publish url
     become_user: tomcat
 
   handlers:
     - name: restart-tomcat
       service: name=tomcat state=restarted
+      listen: restart tomcat and publish url
+
+    - name: publish url
+      debug: 
+        msg: "Url to test tomcat : http://192.168.33.11:8080/sparkjava-hello-world-1.0/hello"
+      listen: restart tomcat and publish url
