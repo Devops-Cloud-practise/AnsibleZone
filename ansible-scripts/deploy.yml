@@ -82,5 +82,5 @@
 
     - name: publish url
       debug: 
-        msg: "Url to test tomcat : http://192.168.33.11:8080/hello-world-1.0/hello      "
+        msg: "Url to test APP running on Tomcat : http://{{ inventory_hostname }}:8080/{{ ciprojectname }} OR http://{{ inventory_hostname }}/{{ ciprojectname }}"
       listen: restart tomcat and publish url
